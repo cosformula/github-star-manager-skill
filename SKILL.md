@@ -7,6 +7,7 @@ metadata:
       {
         "emoji": "⭐",
         "requires": { "bins": ["gh", "jq"] },
+        "notes": "Requires `gh auth login` (authenticated GitHub CLI). For Lists operations (create/add), the token needs `user` scope — use a Classic token. The skill uses the existing `gh` auth session; no separate env var is needed.",
         "install":
           [
             {
@@ -45,6 +46,16 @@ metadata:
 # GitHub Star Manager
 
 Requires `gh` (authenticated) + `jq`. For Lists operations: token needs `user` scope (Classic token recommended).
+
+## Authentication
+
+This skill uses the `gh` CLI's existing auth session. Before using:
+
+1. Run `gh auth login` if not already authenticated
+2. For read-only operations (export, stats): default token scopes are sufficient
+3. For Lists operations (create list, add to list): token needs `user` scope — run `gh auth refresh -s user` or use a [Classic token](https://github.com/settings/tokens) with `user` scope
+
+No separate API key or environment variable is needed.
 
 ## Export Stars
 
