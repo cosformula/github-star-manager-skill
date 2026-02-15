@@ -44,11 +44,7 @@ metadata:
 
 # GitHub Star Manager
 
-Organize and clean up GitHub stars. The agent acts as the AI analysis layer — no external API keys needed.
-
-Only dependency: `gh` (authenticated) + `jq`. Both are cross-platform (macOS/Linux/Windows).
-
-For Lists operations (create/add): GitHub token needs `user` scope (Classic token recommended).
+Requires `gh` (authenticated) + `jq`. For Lists operations: token needs `user` scope (Classic token recommended).
 
 ## Export Stars
 
@@ -60,25 +56,7 @@ gh api user/starred --paginate --jq '.[] | {
 }' | jq -s '.' > /tmp/stars.json
 ```
 
-Slow for 1000+ stars (~1 min per 1000). For quick count: `gh api user/starred --paginate --jq '. | length' | jq -s 'add'`.
-
-Each entry: `full_name`, `description`, `language`, `topics`, `stars`, `forks`, `archived`, `updated_at`, `pushed_at`.
-
-## Quick Stats
-
-```bash
-# Total
-jq 'length' /tmp/stars.json
-
-# Top languages
-jq '[.[].language // "None"] | group_by(.) | map({lang: .[0], n: length}) | sort_by(-.n) | .[:10]' /tmp/stars.json
-
-# Most starred
-jq -r 'sort_by(-.stars) | .[:10] | .[] | "\(.stars)\t\(.full_name)"' /tmp/stars.json
-
-# Archived
-jq '[.[] | select(.archived)] | .[].full_name' /tmp/stars.json
-```
+Slow for 1000+ stars (~1 min per 1000). Quick count: `gh api user/starred --paginate --jq '. | length' | jq -s 'add'`.
 
 ## View Existing Lists
 
@@ -103,15 +81,13 @@ mutation($name: String!, $desc: String) {
 }' -f name="LIST_NAME" -f desc="LIST_DESCRIPTION" --jq '.data.createUserList.list'
 ```
 
-Returns `{ "id": "UL_xxx", "name": "..." }`. Save the `id` for adding repos.
+Save the returned `id` for adding repos.
 
 ## Add Repo to List
 
 ```bash
-# Step 1: get repo node ID
 REPO_ID=$(gh api repos/OWNER/REPO --jq '.node_id')
 
-# Step 2: add to list
 gh api graphql -f query='
 mutation($listId: ID!, $repoId: ID!) {
   addUserListItems(input: {listId: $listId, itemIds: [$repoId]}) {
@@ -120,34 +96,26 @@ mutation($listId: ID!, $repoId: ID!) {
 }' -f listId="LIST_ID" -f repoId="$REPO_ID"
 ```
 
-Add a ~200ms delay between calls to avoid rate limits. Process in batches.
+Add ~200ms delay between calls to avoid rate limits.
 
-## Unstar a Repo
+## Unstar
 
 ```bash
 gh api -X DELETE user/starred/OWNER/REPO
 ```
 
-Always confirm with the user before unstarring.
+Always confirm with user before unstarring.
 
 ## Organize Workflow
 
-1. **Export** stars to JSON
-2. **Read** the JSON, suggest categories based on semantic understanding (language, topics, purpose, domain)
-3. **Present** suggestions to user for review
-4. **Create** Lists and **add** repos after user confirms
+1. Export stars to JSON
+2. Analyze the JSON — suggest categories based on language, topics, purpose, domain
+3. Present suggestions to user for review
+4. Create Lists and add repos after confirmation
 5. Batch operations with delays between API calls
 
 ## Cleanup Workflow
 
-From exported JSON, find candidates:
-
-```bash
-# Stale: not updated in 2+ years (use platform-appropriate date)
-jq '[.[] | select(.pushed_at < "2024-01-01" and .archived == false)]' /tmp/stars.json
-
-# Low stars
-jq '[.[] | select(.stars < 10)]' /tmp/stars.json
-```
-
-Show candidates to user, confirm before unstarring.
+1. Export stars to JSON
+2. Use jq to find archived, stale (2+ years no push), low-star, or deprecated repos
+3. Present candidates to user, confirm before unstarring
