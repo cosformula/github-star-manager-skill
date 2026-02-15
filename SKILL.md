@@ -64,7 +64,7 @@ gh api user/starred --paginate --jq '.[] | {
   full_name, description, url: .html_url, language,
   topics, stars: .stargazers_count, forks: .forks_count,
   archived, updated_at, pushed_at
-}' | jq -s '.' > /tmp/stars.json
+}' | jq -s '.' > stars.json
 ```
 
 Slow for 1000+ stars (~1 min per 1000). Quick count: `gh api user/starred --paginate --jq '. | length' | jq -s 'add'`.
