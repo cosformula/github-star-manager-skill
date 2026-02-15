@@ -1,0 +1,10 @@
+.git/
+.github/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+*.log
+
+# GitHub-only docs
+README.md
