@@ -1,8 +1,9 @@
 # github-star-manager-skill
 
 [![License](https://img.shields.io/github/license/cosformula/github-star-manager-skill)](./LICENSE)
+[![CI](https://github.com/cosformula/github-star-manager-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/cosformula/github-star-manager-skill/actions/workflows/ci.yml)
 
-An [OpenClaw](https://github.com/openclaw/openclaw) skill for managing GitHub stars with AI-powered categorization and cleanup.
+An agent skill for managing GitHub stars with AI-powered categorization and cleanup.
 
 The agent itself acts as the AI layer — no external LLM API keys needed. Only requires `gh` CLI and `jq`.
 
@@ -16,17 +17,22 @@ The agent itself acts as the AI layer — no external LLM API keys needed. Only 
 
 ## Install
 
-### Via ClawHub (recommended)
+### Via npx skills (any agent)
 
 ```bash
-npm i -g clawhub
+npx skills add cosformula/github-star-manager-skill
+```
+
+### Via ClawHub (OpenClaw)
+
+```bash
 clawhub install github-star-manager-skill
 ```
 
 ### Manual
 
 ```bash
-git clone https://github.com/cosformula/github-star-manager-skill.git skills/github-star-manager
+git clone https://github.com/cosformula/github-star-manager-skill.git
 ```
 
 ## Prerequisites
@@ -37,7 +43,7 @@ git clone https://github.com/cosformula/github-star-manager-skill.git skills/git
 
 ## Usage
 
-Just ask your OpenClaw agent:
+Just ask your agent:
 
 - "Organize my GitHub stars"
 - "How many stars do I have?"
@@ -49,7 +55,7 @@ The agent reads SKILL.md and handles everything — fetching data, analyzing rep
 
 ## How It Works
 
-Unlike traditional tools that call external LLMs for analysis, this skill leverages the fact that OpenClaw agents **are** LLMs. The agent:
+Unlike traditional tools that call external LLMs for analysis, this skill leverages the fact that coding agents **are** LLMs. The agent:
 
 1. Exports starred repos via `gh api` (paginated)
 2. Reads and semantically analyzes the repo data

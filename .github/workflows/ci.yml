@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Node syntax checks
+        run: |
+          for f in scripts/*.mjs scripts/*.js; do
+            [ -f "$f" ] && echo "[syntax] $f" && node --check "$f"
+          done
+
+      - name: Run tests
+        run: |
+          if ls tests/*.test.mjs 1>/dev/null 2>&1; then
+            node --test tests/*.test.mjs
+          fi
+          if [ -f tests/e2e.test.mjs ]; then
+            node --test tests/e2e.test.mjs
+          fi
+
+  package-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify publish dir
+        run: |
+          set -euo pipefail
+          OUT=/tmp/skill
+          rm -rf "$OUT" && mkdir -p "$OUT"
+          rsync -a --delete --exclude-from=.clawhubignore ./ "$OUT/"
+          echo "Publish files:"; find "$OUT" -type f -maxdepth 3 -print
+          test ! -f "$OUT/README.md"
+          test ! -d "$OUT/tests"
+          test ! -d "$OUT/.github"
+          test -f "$OUT/SKILL.md"
