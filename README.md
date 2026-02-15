@@ -1,7 +1,12 @@
 # github-star-manager-skill
 
+[![ClawHub](https://img.shields.io/badge/ClawHub-github--star--manager--skill-blue?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K)](https://clawhub.ai/skills/github-star-manager-skill)
+[![ClawHub version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fclawhub.ai%2Fapi%2Fv1%2Fskills%2Fgithub-star-manager-skill&query=%24.skill.tags.latest&label=clawhub&prefix=v&color=blue)](https://clawhub.ai/skills/github-star-manager-skill)
+[![ClawHub downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fclawhub.ai%2Fapi%2Fv1%2Fskills%2Fgithub-star-manager-skill&query=%24.skill.stats.downloads&label=clawhub%20downloads&color=blue)](https://clawhub.ai/skills/github-star-manager-skill)
+[![GitHub stars](https://img.shields.io/github/stars/cosformula/github-star-manager-skill?style=flat&logo=github)](https://github.com/cosformula/github-star-manager-skill)
 [![License](https://img.shields.io/github/license/cosformula/github-star-manager-skill)](./LICENSE)
 [![CI](https://github.com/cosformula/github-star-manager-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/cosformula/github-star-manager-skill/actions/workflows/ci.yml)
+[![Publish to ClawHub](https://github.com/cosformula/github-star-manager-skill/actions/workflows/clawhub-publish.yml/badge.svg)](https://github.com/cosformula/github-star-manager-skill/actions/workflows/clawhub-publish.yml)
 
 An agent skill for managing GitHub stars with AI-powered categorization and cleanup.
 
