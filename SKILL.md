@@ -88,15 +88,12 @@ Save the returned `id` for adding repos.
 ```bash
 REPO_ID=$(gh api repos/OWNER/REPO --jq '.node_id')
 
-gh api graphql -f query='
-mutation($listId: ID!, $repoId: ID!) {
-  addUserListItems(input: {listId: $listId, itemIds: [$repoId]}) {
-    list { name items { totalCount } }
-  }
-}' -f listId="LIST_ID" -f repoId="$REPO_ID"
+# Note: listIds is a JSON array, use --input to pass variables correctly
+echo '{"query":"mutation($itemId:ID!,$listIds:[ID!]!){updateUserListsForItem(input:{itemId:$itemId,listIds:$listIds}){user{login}}}","variables":{"itemId":"'$REPO_ID'","listIds":["LIST_ID"]}}' \
+  | gh api graphql --input -
 ```
 
-Add ~200ms delay between calls to avoid rate limits.
+Add ~300ms delay between calls to avoid rate limits.
 
 ## Unstar
 
